@@ -13,41 +13,41 @@
 		}
 	</style>
 	<script>
-		var key = '403d5274ed5eb1c0131d74485aaa30dd';
+		var key = 'a20ecbe391bca214cd8dff80c1c188bd'; // key to use flicker api ... updated to mine
 		var base_url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=" + key + "&format=json&nojsoncallback=1";
 
 		$(document).ready(function () {
 
-			var displayPhotos = function (photos) {
-				if(photos.length > 0){
+			var displayPhotos = function (photos) { //creates a function to display imgs on page
+				if(photos.length > 0){              //if statement to determine if any photos were returned from search
 					$('#photo-list').html('');
 				}else{
 					$('#photo-list').html('No Photos Found');
 				}
 				for (var index in photos) {
-					var photoObj = photos[index];
+					var photoObj = photos[index];              //loops through all found photos
 					var url = 'https://farm' + photoObj.farm + '.staticflickr.com/' + photoObj.server + '/' + photoObj.id + '_' + photoObj.secret + '.jpg'
-					var img = $('<img/>').attr('src', url).width(250);
-					$('#photo-list').append(img);
+					var img = $('<img/>').attr('src', url).width(250); //creates an img tag containing a img
+					$('#photo-list').append(img);                      //appends img to the photo list div
 				}
 			}
 
-			$('body').on('click', '#search-btn', function () {
-				var val = $('#search').val();
-				var search_url = base_url + "&text=" + val;
-				var photos = [];
+			$('body').on('click', '#search-btn', function () {   //onclick handeler for search button 
+				var val = $('#search').val();                    //gets users input
+				var search_url = base_url + "&text=" + val;      //adds the search criteria to the above defined base url
+				var photos = [];                                 //creates a blank array to hold the returned photos
 
-				$('#photo-list').html('Searching');
+				$('#photo-list').html('Searching');               //displays 'searching' while waiting for search to finish
 
-				$.ajax({
+				$.ajax({                                        //ajax call to flicker to retrieve photos based on search
 					url: search_url,
-					dateType: 'json',
-					crossDomain: true,
-					success: function (response) {
-						photos = response.photos.photo;
-						displayPhotos(photos);
+					dateType: 'json',      //expect json data back
+					crossDomain: true,     //allows for cross domain calls
+					success: function (response) {         //if the call is successful run function
+						photos = response.photos.photo;   //set the response to the above declared photos array
+						displayPhotos(photos);            //calls the displayphotos function with photos as a param to display photos on page
 					},
-					error: function (response) {
+					error: function (response) {          //if there was an error with the call console log the response
 						console.error(response);
 					}
 				});
